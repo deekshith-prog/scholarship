@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Scholarship Finder</title>
+
+<style>
+
+body{
+font-family: Arial;
+background: linear-gradient(135deg,#667eea,#764ba2);
+text-align:center;
+color:white;
+margin:0;
+padding:0;
+}
+
+h1{
+margin-top:40px;
+}
+
+.search-box{
+margin:30px;
+}
+
+input{
+padding:10px;
+width:250px;
+border-radius:6px;
+border:none;
+}
+
+button{
+padding:10px 20px;
+background:#ffcc00;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+#scholarships{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.card{
+background:white;
+color:black;
+padding:20px;
+margin:15px;
+width:250px;
+border-radius:10px;
+box-shadow:0px 4px 8px rgba(0,0,0,0.2);
+}
+
+a{
+text-decoration:none;
+color:blue;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🎓 Scholarship Finder</h1>
+
+<div class="search-box">
+
+<input type="text" id="search" placeholder="Search scholarship">
+
+<button onclick="searchScholarships()">Search</button>
+
+</div>
+
+<div id="scholarships"></div>
+
+<script>
+
+let scholarships = [];
+
+fetch("/scholarships")
+.then(res => res.json())
+.then(data => {
+
+scholarships = data;
+displayScholarships(data);
+
+});
+
+function displayScholarships(data){
+
+let output = "";
+
+data.forEach(s => {
+
+output += `
+<div class="card">
+
+<h3>${s.name}</h3>
+
+<p>Country: ${s.country}</p>
+
+<p>Course: ${s.course}</p>
+
+<p>Amount: ${s.amount}</p>
+
+<a href="${s.link}" target="_blank">Apply Now</a>
+
+</div>
+`;
+
+});
+
+document.getElementById("scholarships").innerHTML = output;
+
+}
+
+function searchScholarships(){
+
+let keyword = document.getElementById("search").value.toLowerCase();
+
+let filtered = scholarships.filter(s =>
+s.name.toLowerCase().includes(keyword)
+);
+
+displayScholarships(filtered);
+
+}
+
+</script>
+
+</body>
+
+</html>
